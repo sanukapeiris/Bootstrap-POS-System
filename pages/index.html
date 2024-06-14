@@ -56,12 +56,11 @@
       <div class="row">
         <div class="col-md-6">
           <button class="btn btn-success btn-custom" type="button" data-bs-toggle="modal" data-bs-target="#newCustomerModal"><i class="fas fa-user-plus me-2"></i>New Customer</button>
-          <button class="btn btn-warning me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#updateCustomerModal" id="updateCustomerbtn">Update Customers</button>
         </div>
         <div class="col-md-6">
           <form class="input-group">
             <input type="text" class="form-control" placeholder="Search customer">
-            <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+            <button class="btn btn-primary" type="button"><i class="fas fa-search" id="customerSearchButton"></i></button>
           </form>
         </div>
       </div>
@@ -84,6 +83,7 @@
                 <th scope="col">Email</th>
                 <th scope="col">Address</th>
                 <th scope="col">Phone</th>
+                <th scope="col">Action</th>
               </tr>
               </thead>
               <tbody id="customer-table-tbody"></tbody>
@@ -104,10 +104,7 @@
         </div>
         <div class="modal-body">
           <form>
-            <!--<div class="mb-3">
-              <label for="customerID" class="form-label">ID</label>
-              <input type="text" class="form-control" id="customerID">
-            </div>-->
+
             <div class="mb-3">
               <label class="form-label">Name :</label>
               <input type="text" class="form-control" id="customerName">
@@ -185,6 +182,8 @@
       <div class="row">
         <div class="col-md-6">
           <button class="btn btn-success btn-custom" type="button" data-bs-toggle="modal" data-bs-target="#newItemModal"><i class="fas fa-plus-circle me-2"></i>New Item</button>
+          <button class="btn btn-warning me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#updateCustomerModal" id="updateItembtn">Update Customers</button>
+
         </div>
         <div class="col-md-6">
           <form class="input-group">
@@ -204,7 +203,7 @@
         </div>
         <div class="card-body">
           <div class="table-responsive">
-            <table class="table table-striped table-hover table-custom">
+            <table class="table table-striped table-hover table-custom" id="Item-table">
               <thead>
               <tr>
                 <th>Code</th>
@@ -214,33 +213,14 @@
                 <th>Action</th>
               </tr>
               </thead>
-              <tbody>
-              <tr>
-                <td>001</td>
-                <td>Keeri Samba</td>
-                <td>1kg</td>
-                <td>100.00</td>
-                <td>
-                  <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                </td>
-              </tr>
-              <tr>
-                <td>002</td>
-                <td>Biscuit</td>
-                <td>1pcs</td>
-                <td>150.00</td>
-                <td>
-                  <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                </td>
-              </tr>
-              </tbody>
+              <tbody id="Item-table-tbody"></tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
-  </section>
 
+  </section>
   <div class="modal fade" id="newItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -251,31 +231,69 @@
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="itemCode" class="form-label">Item Code</label>
+              <label class="form-label">Item Code :</label>
               <input type="text" class="form-control" id="itemCode">
             </div>
             <div class="mb-3">
-              <label for="itemName" class="form-label">Name</label>
+              <label class="form-label">Name :</label>
               <input type="text" class="form-control" id="itemName">
             </div>
+            <div class="mb-3"></div>
+            <label class="form-label">Quantity :</label>
+            <input type="email" class="form-control" id="itemQuantity">
+
             <div class="mb-3">
-              <label for="itemQuantity" class="form-label">Quantity</label>
-              <input type="text" class="form-control" id="itemQuantity">
-            </div>
-            <div class="mb-3">
-              <label for="itemPrice" class="form-label">Price</label>
+              <label class="form-label">Price :</label>
               <input type="text" class="form-control" id="itemPrice">
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-success">Save</button>
+          <button type="button" class="btn btn-success" id="btnAddItem">Save</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<div class="modal fade" id="updateItemModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h2 class="modal-title" id="updateItem">Update Item</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Item ID:</label>
+              <input type="text" class="form-control" id="ItemIdUpdate" disabled>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Item Name:</label>
+              <input type="text" class="form-control" id="ItemNameUpdate">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Item Quantity:</label>
+              <input type="email" class="form-control" id="ItemQuantityUpdate">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Item Quantity:</label>
+              <input type="email" class="form-control" id="ItemPriceUpdate">
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btnUpdateItem">Update </button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="btnDeleteItem">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <section id="order-section">
   <div class="container-fluid">
@@ -386,7 +404,8 @@
 <script src="../assets/lib/jquery-3.7.1.min.js"></script>
 <script src="../Controller/SAP.js"></script>
 
-<script type="module" src="../Controller/Customers.js"></script>
+<script type="module" src="../Controller/Customers_Controller.js"></script>
+<script type="module" src="../Controller/Item_Controller.js"></script>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
