@@ -1,113 +1,142 @@
-import {Item} from "../db/db.js";
-import { ItemModel } from "../Model/Item_Model.js";
+import {items} from "../db/db.js";
+import {ItemModel} from "../model/Item_Model";
+import {RegexValidator} from "../validation/RegexValidator.js";
 
-let idCounter = 1;
 let clickedIndex;
 
-$('#btnAddItem').on('click', () => {
-    let itemCode = getItemId();
+$('#btnAddItem').on('click',() =>{
+    let itemCode = $("#itemCode").val();
     let itemName = $("#itemName").val();
     let itemQuantity = $("#itemQuantity").val();
     let itemPrice = $("#itemPrice").val();
 
-    let item = new ItemModel(itemCode, itemName, itemQuantity, itemPrice);
-    Item.push(item);
-    console.log(Item);
-    clearItem();
-    loadTable();
-});
+    let validator = new RegexValidator();
 
-function getItemId() {
-    return "I" + String(idCounter++).padStart(3, '0');
-}
+    const validationResult = validator.validateItem(itemCode, itemName, itemQuantity, itemPrice);
+
+    if (validationResult.isValid){
+        let item = new ItemModel(itemCode,itemName,itemQuantity,itemPrice)
+        items.push(item)
+
+        loadItemTable()
+        clearItem()
+    }
+    else {
+        alert('Invalid item data. Please check the input fields.');
+        if (!validationResult.isItemIdValid) {
+            alert('Invalid Item Code');
+        }
+        if (!validationResult.isItemNameValid) {
+            alert('Invalid Item Name');
+        }
+        if (!validationResult.isQtoValid) {
+            alert('Invalid Quantity');
+        }
+        if (!validationResult.isPriceValid) {
+            alert('Invalid Price');
+        }
+    }
+});
 
 function clearItem() {
-    $("#itemName").val("");
-    $("#itemQuantity").val("");
-    $("#itemPrice").val("");
-    $("#ItemIdUpdate").val("");
-    $("#ItemNameUpdate").val("");
-    $("#ItemQuantityUpdate").val("");
-    $("#ItemPriceUpdate").val("");
+    $("#itemCode").val("")
+    $("#itemName").val("")
+    $("#itemQuantity").val("")
+    $("#itemPrice").val("")
+
+    $("#itemCodeUpdate").val("");
+    $("#itemNameUpdate").val("");
+    $("#itemQuantityUpdate").val("");
+    $("#itemPriceUpdate").val("");
 }
 
-function loadTable() {
-    $("#Item-table-tbody").empty();
-    Item.forEach((item, index) => {
-        let record = `
-            <tr>
-                <td class="itemCode">${item.ItemCode}</td>
-                <td class="itemName">${item.ItemName}</td>
-                <td class="itemQuantity">${item.ItemQuantity}</td>
-                <td class="itemPrice">${item.ItemPrice}</td>
-                <td>
-                    <button class="btn btn-warning btn-sm edit-item" data-index="${index}">Edit</button>
-                    <button class="btn btn-danger btn-sm delete-item" data-index="${index}">Delete</button>
-                </td>
-            </tr>`;
-        $("#Item-table-tbody").append(record);
-    });
+export function loadItemTable(){
+    $("#item-table-tbody").append().empty()
+    items.map((item,index)=>{
+        var record =
+            `<tr>
+        <td class="itemCode">${item.itemCode}</td>
+        <td class = "itemName">${item.itemName}</td>
+        <td class = "itemQuantity">${item.itemQuantity}</td>
+        <td class = "itemPrice">${item.itemPrice}</td>
+            </tr>`
+        $("#item-table-tbody").append(record);
+    })
 }
 
-$("#Item-table-tbody").on('click', '.edit-item', function () {
-    clickedIndex = $(this).data('index');
-    let item = Item[clickedIndex];
+$("#item-table-tbody").on('click','tr', function (){
+    let index = $(this).index();
+    clickedIndex = index;
+    let itemCode = $(this).find(".itemCode").text()
+    let itemName = $(this).find(".itemName").text()
+    let itemQuantity = $(this).find(".itemQuantity").text()
+    let itemPrice = $(this).find(".itemPrice").text()
 
-    $("#ItemIdUpdate").val(item.ItemCode);
-    $("#ItemNameUpdate").val(item.ItemName);
-    $("#ItemQuantityUpdate").val(item.ItemQuantity);
-    $("#ItemPriceUpdate").val(item.ItemPrice);
-    $("#updateItemModal").modal('show');
-});
 
-$("#updateItembtn").on('click', () => {
-    let itemIdUpdated = $("#ItemIdUpdate").val();
-    let itemNameUpdated = $("#ItemNameUpdate").val();
-    let itemQuantityUpdated = $("#ItemQuantityUpdate").val();
-    let itemPriceUpdated = $("#ItemPriceUpdate").val();
+    $("#updateItembtn").click()
+    $("#itemCodeUpdate").val(itemCode);
+    $("#itemNameUpdate").val(itemName);
+    $("#itemQuantityUpdate").val(itemQuantity);
+    $("#itemPriceUpdate").val(itemPrice);
+})
 
-    let itemObject = Item[clickedIndex];
+$("#btnUpdateItem").on('click',()=>{
 
-    itemObject.ItemCode = itemIdUpdated;
-    itemObject.ItemName = itemNameUpdated;
-    itemObject.ItemQuantity = itemQuantityUpdated;
-    itemObject.ItemPrice = itemPriceUpdated;
+    let itemCodeUpdated = $("#itemCodeUpdate").val();
+    let itemNameUpdated = $("#itemNameUpdate").val();
+    let itemQuantityUpdated = $("#itemQuantityUpdate").val();
+    let itemPriceUpdated = $("#itemPriceUpdate").val();
 
-    clearItem();
-    loadTable();
-    $('#updateItemModal').modal('hide');
-});
+    let customerObject = items[clickedIndex];
 
-$("#Item-table-tbody").on('click', '.delete-item', function () {
-    let index = $(this).data('index');
-    Item.splice(index, 1);
-    loadTable();
-});
+    customerObject.itemCode =itemCodeUpdated
+    customerObject.itemName = itemNameUpdated
+    customerObject.itemQuantity = itemQuantityUpdated
+    customerObject.itemPrice = itemPriceUpdated
 
-$("#customerSearchButton").on('click', () => {
+    clearItem()
+    loadItemTable()
+})
+
+$("#btnDeleteItem").on('click',()=>{
+    items.splice(clickedIndex,1)
+    loadItemTable()
+    clearItem()
+})
+
+$("#itemSearchButton").on('click', () => {
     const searchQuery = $("#searchBar").val().trim().toLowerCase();
-    const searchResults = Item.filter(item =>
-        item.ItemCode.toLowerCase() === searchQuery ||
-        item.ItemName.toLowerCase().includes(searchQuery) ||
-        item.ItemQuantity.toLowerCase() === searchQuery ||
-        item.ItemPrice.toLowerCase() === searchQuery
-    );
+    const searchResults = [];
 
-    $("#Item-table-tbody").empty();
+
+    items.forEach(item => {
+        if (
+            item.itemCode.toLowerCase() === searchQuery ||
+            item.itemName.toLowerCase().includes(searchQuery) ||
+            item.itemQuantity.toLowerCase().includes(searchQuery) ||
+            item.itemPrice.toLowerCase() === (searchQuery)
+        ) {
+            searchResults.push(item);
+        }
+    });
+
+    $("#item-table-tbody").empty();
+
 
     searchResults.forEach(item => {
-        $("#Item-table-tbody").append(`
+        $("#item-table tbody").append(`
             <tr>
-                <td>${item.ItemCode}</td>
-                <td>${item.ItemName}</td>
-                <td>${item.ItemQuantity}</td>
-                <td>${item.ItemPrice}</td>
+                <td>${item.itemCode}</td>
+                <td>${item.itemName}</td>
+                <td>${item.itemQuantity}</td>
+                <td>${item.itemPrice}</td>
             </tr>
         `);
     });
 
+
     if (searchResults.length === 0) {
-        $("#Item-table-tbody").html("<tr><td colspan='5'>No matching items were found.</td></tr>");
+        $("#item-table-tbody").html("<tr><td colspan='4'>No matching items were found.</td></tr>");
     }
 });
 
@@ -115,33 +144,35 @@ function suggestNames(input) {
     const suggestions = [];
     const inputText = input.toLowerCase().trim();
 
-    Item.forEach(item => {
-        if (item.ItemName.toLowerCase().startsWith(inputText)) {
-            suggestions.push(item.ItemName);
+
+    items.forEach(item => {
+        if (item.itemName.toLowerCase().startsWith(inputText)) {
+            suggestions.push(item.itemName);
         }
     });
 
     return suggestions;
 }
 
+
 function updateSuggestions(suggestions) {
-    const suggestionsList = $("#suggestions");
+    const suggestionsList = $("#item-suggestions");
+
     suggestionsList.empty();
 
     suggestions.forEach(suggestion => {
         suggestionsList.append(`<li>${suggestion}</li>`);
     });
 }
-
-$("#searchBar").on('input', function () {
+$("#item-searchBar").on('input', function() {
     const input = $(this).val();
     const suggestions = suggestNames(input);
 
     updateSuggestions(suggestions);
 
     if (input.trim() === '') {
-        $("#suggestions").hide();
+        $("#item-suggestions").hide();
     } else {
-        $("#suggestions").show();
+        $("#item-suggestions").show();
     }
 });

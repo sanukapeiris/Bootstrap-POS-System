@@ -1,4 +1,7 @@
-export var customers = [];
-export var Item = [];
-export var order_db = [];
-export var order_details_db = []
+export let customers = []
+export let items = []
+export let orders= []
+export let order_details = []
+
+export let orderItems = []
+export let cartItems =[]

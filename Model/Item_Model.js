@@ -1,33 +1,40 @@
 export class ItemModel {
-    constructor(ItemCode, ItemName,ItemQuantity, ItemPrice) {
-        this._ItemCode = ItemCode
-        this._ItemName = ItemName
-        this._ItemQuantity = ItemQuantity
-        this._ItemPrice = ItemPrice
+    constructor(itemCode,itemName,itemQuantity,itemPrice) {
+        this._itemCode = itemCode;
+        this._itemName = itemName;
+        this._itemQuantity = itemQuantity;
+        this._itemPrice = itemPrice;
+    }
 
+    get itemCode() {
+        return this._itemCode;
     }
-    get ItemCode() {
-        return this._ItemCode;
+
+    set itemCode(value) {
+        this._itemCode = value;
     }
-    get ItemName() {
-        return this._ItemName;
+
+    get itemName() {
+        return this._itemName;
     }
-    get ItemQuantity() {
-        return this._ItemQuantity;
+
+    set itemName(value) {
+        this._itemName = value;
     }
-    get ItemPrice() {
-        return this._ItemPrice;
+
+    get itemQuantity() {
+        return this._itemQuantity;
     }
-    set ItemCode(value) {
-        this._ItemCode = value;
+
+    set itemQuantity(value) {
+        this._itemQuantity = value;
     }
-    set ItemName(value) {
-        this._ItemName = value;
+
+    get itemPrice() {
+        return this._itemPrice;
     }
-    set ItemQuantity(value) {
-        this._ItemQuantity = value;
-    }
-    set ItemPrice(value) {
-        this._ItemPrice = value;
+
+    set itemPrice(value) {
+        this._itemPrice = value;
     }
 }
