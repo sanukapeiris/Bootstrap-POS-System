@@ -1,9 +1,9 @@
 import {cartItems, items, orderItems, customers, orders, order_details} from "../db/db.js";
-import {OrderModel} from "../model/Order_Model";
+import {OrderModel} from "../model/orderModel.js";
 
 import {CartModel} from "../model/cartModel.js";
-import {loadItemTable} from "./Item_Controller";
-import {OrderDetailModel} from "../model/Order_Details_Model";
+import {loadItemTable} from "./itemController.js";
+import {OrderDetailModel} from "../model/orderDetailModel.js";
 
 let displayCart = [];
 let clickedIndex;

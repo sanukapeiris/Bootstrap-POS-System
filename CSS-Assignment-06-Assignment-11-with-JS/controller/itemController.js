@@ -1,5 +1,5 @@
 import {items} from "../db/db.js";
-import {ItemModel} from "../model/Item_Model";
+import {ItemModel} from "../model/itemModel.js";
 import {RegexValidator} from "../validation/RegexValidator.js";
 
 let clickedIndex;

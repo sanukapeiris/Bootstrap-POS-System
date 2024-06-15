@@ -1,5 +1,5 @@
 import {customers} from "../db/db.js";
-import  {CustomerModel} from "../model/Customers_Model";
+import  {CustomerModel} from "../model/customerModel.js";
 import {RegexValidator} from "../validation/RegexValidator.js";
 
 
